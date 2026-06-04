@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Pavilion — Architectural Design Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1612;
+    --paper: #f5f0e8;
+    --warm: #c8a96e;
+    --warm-light: #e8d9b8;
+    --warm-muted: #9e7e4a;
+    --stone: #8a8278;
+    --line: rgba(26,22,18,0.15);
+    --red-accent: #8b3a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, var(--line) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, var(--line) 60px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .hero-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2.5rem 3rem;
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .hero-meta {
+    text-align: right;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    line-height: 1.8;
+  }
+
+  .hero-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .project-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--warm-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .project-label::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--warm-muted);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--warm-muted);
+  }
+
+  .hero-desc {
+    max-width: 520px;
+    font-size: 0.72rem;
+    line-height: 2;
+    color: var(--stone);
+    letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .hero-footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .scroll-hint {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 2rem;
+    background: var(--stone);
+    animation: pulse-down 2s ease-in-out infinite;
+  }
+  @keyframes pulse-down {
+    0%,100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ── 3D HOUSE ILLUSTRATION ── */
+  .illustration-section {
+    background: var(--ink);
+    padding: 5rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .illustration-section::before {
+    content: 'PERSPECTIVE VIEW';
+    position: absolute;
+    top: 2.5rem; right: 3rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--warm);
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--warm);
+  }
+
+  .house-3d-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+  }
+
+  /* ── FLOOR PLAN ── */
+  .floorplan-section {
+    padding: 5rem 3rem;
+    position: relative;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .section-note {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .floorplan-container {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .fp-svg-wrap {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 2rem;
+  }
+
+  /* Room legend sidebar */
+  .room-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .legend-item {
+    display: grid;
+    grid-template-columns: 10px 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .legend-item:hover { background: rgba(200,169,110,0.05); padding-left: 0.5rem; }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  .legend-name {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .legend-size {
+    font-size: 0.6rem;
+    color: var(--stone);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ROOM DETAILS ── */
+  .rooms-section {
+    background: var(--ink);
+    padding: 5rem 3rem;
+    color: var(--paper);
+  }
+
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .room-card {
+    padding: 2rem;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .room-card:hover { background: rgba(200,169,110,0.08); }
+  .room-card:nth-child(3n) { border-right: none; }
+
+  .room-card-num {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--warm-muted);
+    margin-bottom: 1rem;
+  }
+
+  .room-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 0.75rem;
+    line-height: 1.1;
+  }
+
+  .room-card-size {
+    font-size: 0.62rem;
+    color: var(--warm);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .room-card-desc {
+    font-size: 0.62rem;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── DESIGN RATIONALE ── */
+  .rationale-section {
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .rationale-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 2.5rem;
+  }
+
+  .rationale-body {
+    font-size: 0.68rem;
+    line-height: 2.2;
+    color: var(--stone);
+    letter-spacing: 0.04em;
+  }
+
+  .rationale-body p { margin-bottom: 1.5rem; }
+
+  .principles {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .principle {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .principle-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--warm-light);
+    line-height: 1;
+  }
+
+  .principle-text { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .principle-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 0.3rem;
+  }
+
+  .principle-desc {
+    font-size: 0.62rem;
+    line-height: 1.9;
+    color: var(--stone);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.4);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    .floorplan-container { grid-template-columns: 1fr; }
+    .rooms-grid { grid-template-columns: 1fr 1fr; }
+    .rooms-grid .room-card:nth-child(2n) { border-right: none; }
+    .rooms-grid .room-card:nth-child(3n) { border-right: 1px solid rgba(255,255,255,0.1); }
+    .rationale-section { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-title { font-size: clamp(3rem,8vw,5rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <header class="hero-header">
+    <div class="logo">Architectural Design Studio</div>
+    <div class="hero-meta">
+      Project Ref: ADS-2026-047<br>
+      Residential — Single Storey<br>
+      Kampala Region, Uganda
+    </div>
+  </header>
+
+  <div class="hero-body">
+    <div class="project-label">Design Proposal</div>
+    <h1 class="hero-title">The<br><em>Pavilion</em><br>House</h1>
+    <p class="hero-desc">
+      A single-storey residence organized around a bold separation of public
+      and private life. The social wing opens generously; the sleeping wing
+      retreats into quiet. A home office bridges both worlds.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-val">3</span>
+        <span class="stat-label">Bedrooms</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">2,200</span>
+        <span class="stat-label">Sq Ft</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">8</span>
+        <span class="stat-label">Rooms</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">1</span>
+        <span class="stat-label">Storey</span>
+      </div>
+    </div>
+  </div>
+
+  <footer class="hero-footer">
+    <span class="scroll-hint">Scroll to explore</span>
+    <span style="font-size:0.6rem;letter-spacing:0.15em;color:var(--stone)">2026 — Residential</span>
+  </footer>
+</section>
+
+<!-- ══════════ 3D INTERACTIVE MODEL ══════════ -->
+<section class="illustration-section fade-in" style="padding-bottom:3rem">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem">
+    <div class="section-label" style="margin-bottom:0">Interactive 3D model</div>
+    <div style="font-size:0.58rem;letter-spacing:0.15em;color:rgba(200,169,110,0.5);text-align:right;line-height:2">
+      DRAG TO ORBIT &nbsp;·&nbsp; SCROLL TO ZOOM<br>RIGHT-DRAG TO PAN
+    </div>
+  </div>
+
+  <div id="canvas3d" style="width:100%;height:560px;position:relative;border:1px solid rgba(200,169,110,0.15);cursor:grab;"></div>
+
+  <!-- View buttons -->
+  <div style="display:flex;gap:0.75rem;margin-top:1.25rem;flex-wrap:wrap">
+    <button onclick="setView('iso',this)" class="view-btn active">Isometric</button>
+    <button onclick="setView('front',this)" class="view-btn">Front</button>
+    <button onclick="setView('side',this)" class="view-btn">Side</button>
+    <button onclick="setView('top',this)" class="view-btn">Top / Plan</button>
+    <button onclick="setView('pool',this)" class="view-btn">Pool & Terrace</button>
+    <button onclick="toggleRotate()" class="view-btn" id="rotateBtn">⟳ Auto-rotate</button>
+  </div>
+
+  <!-- Loading overlay -->
+  <div id="loading3d" style="position:absolute;top:0;left:0;right:0;height:560px;display:flex;align-items:center;justify-content:center;background:#1a1612;pointer-events:none;transition:opacity 0.6s">
+    <span style="font-size:0.62rem;letter-spacing:0.2em;color:rgba(200,169,110,0.6)">BUILDING MODEL…</span>
+  </div>
+</section>
+
+<style>
+.view-btn {
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  background:transparent;
+  color:rgba(200,169,110,0.7);
+  border:1px solid rgba(200,169,110,0.3);
+  padding:0.45rem 1rem;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.view-btn:hover { background:rgba(200,169,110,0.1); color:#c8a96e; border-color:rgba(200,169,110,0.6); }
+.view-btn.active { background:rgba(200,169,110,0.15); color:#c8a96e; border-color:#c8a96e; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  const container = document.getElementById('canvas3d');
+  const H = 580;
+
+  /* ── Renderer ── */
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.physicallyCorrectLights = true;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+  renderer.setClearColor(0x0d1117, 1);
+  container.appendChild(renderer.domElement);
+
+  setTimeout(() => {
+    const lo = document.getElementById('loading3d');
+    if (lo) { lo.style.opacity = '0'; setTimeout(() => lo.remove(), 700); }
+  }, 300);
+
+  /* ── Scene / Fog ── */
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d1520);
+  scene.fog = new THREE.FogExp2(0x0d1520, 0.018);
+
+  /* ── Camera ── */
+  const camera = new THREE.PerspectiveCamera(42, container.clientWidth / H, 0.1, 300);
+
+  /* ── Lights ── */
+  // Sky hemisphere
+  const hemi = new THREE.HemisphereLight(0x4488bb, 0x223311, 0.6);
+  scene.add(hemi);
+
+  // Sun — warm golden hour from upper-right
+  const sun = new THREE.DirectionalLight(0xffe8c0, 3.5);
+  sun.position.set(18, 22, 12);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(4096, 4096);
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 100;
+  sun.shadow.camera.left = -25; sun.shadow.camera.right = 25;
+  sun.shadow.camera.top = 25; sun.shadow.camera.bottom = -25;
+  sun.shadow.bias = -0.0008;
+  scene.add(sun);
+
+  // Cool sky fill from opposite
+  const skyFill = new THREE.DirectionalLight(0x99ccff, 0.8);
+  skyFill.position.set(-15, 10, -8);
+  scene.add(skyFill);
+
+  // Interior warm glow through glass
+  const glow1 = new THREE.PointLight(0xffcc66, 12, 8, 2);
+  glow1.position.set(-3, 2.5, 3.2);
+  scene.add(glow1);
+  const glow2 = new THREE.PointLight(0xffdd88, 8, 6, 2);
+  glow2.position.set(5, 2, 3.2);
+  scene.add(glow2);
+
+  // Pool light
+  const poolLight = new THREE.PointLight(0x44aaff, 6, 7, 2);
+  poolLight.position.set(-3, 0.3, -5);
+  scene.add(poolLight);
+
+  /* ── Material helpers ── */
+  const M = THREE.MeshPhysicalMaterial;
+
+  // Concrete — smooth warm-grey
+  const mConcrete = new M({ color: 0xd8d0c4, roughness: 0.85, metalness: 0.0 });
+  // Dark cladding — charcoal vertical fins
+  const mCladding = new M({ color: 0x2c2c2c, roughness: 0.7, metalness: 0.1 });
+  // Stone accent — warm travertine
+  const mStone = new M({ color: 0xc8b898, roughness: 0.9, metalness: 0.0 });
+  // Flat roof — dark membrane
+  const mRoofMem = new M({ color: 0x1a1a1a, roughness: 0.95, metalness: 0.05 });
+  // Roof overhang soffit — timber look
+  const mTimber = new M({ color: 0x8a5c38, roughness: 0.8, metalness: 0.0 });
+  // Glazing — reflective blue-grey
+  const mGlass = new M({ color: 0x88aacc, roughness: 0.05, metalness: 0.0, transparent: true, opacity: 0.45, envMapIntensity: 1.0 });
+  const mGlassWarm = new M({ color: 0xffdd88, roughness: 0.05, metalness: 0.0, transparent: true, opacity: 0.35 });
+  // Steel frame — dark gunmetal
+  const mSteel = new M({ color: 0x333333, roughness: 0.3, metalness: 0.8 });
+  // Ground — dark paving
+  const mGround = new M({ color: 0x1c1c1c, roughness: 1.0, metalness: 0.0 });
+  // Grass
+  const mGrass = new M({ color: 0x2d4a1e, roughness: 1.0, metalness: 0.0 });
+  // Patio — light limestone
+  const mPatio = new M({ color: 0xd4caba, roughness: 0.8, metalness: 0.0 });
+  // Pool water
+  const mPool = new M({ color: 0x1a6688, roughness: 0.05, metalness: 0.0, transparent: true, opacity: 0.75 });
+  // Pool tile edge
+  const mPoolEdge = new M({ color: 0x888888, roughness: 0.3, metalness: 0.2 });
+  // Wood deck
+  const mDeck = new M({ color: 0x7a5030, roughness: 0.75, metalness: 0.0 });
+  // Tree foliage — dark green
+  const mLeaf = new M({ color: 0x1e3a16, roughness: 1.0, metalness: 0.0 });
+  const mLeafLight = new M({ color: 0x2d5020, roughness: 1.0 });
+  const mTrunk = new M({ color: 0x2a1a0e, roughness: 0.95 });
+  // Gold accents
+  const mGold = new M({ color: 0xc8a050, roughness: 0.2, metalness: 0.9 });
+  // White render
+  const mWhite = new M({ color: 0xf0ece4, roughness: 0.7 });
+  // Boundary wall
+  const mBoundary = new M({ color: 0x3a3530, roughness: 0.9 });
+
+  /* ── Geometry helpers ── */
+  function box(w, h, d, mat, x, y, z, ry) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y, z);
+    if (ry) m.rotation.y = ry;
+    m.castShadow = true; m.receiveShadow = true;
+    scene.add(m); return m;
+  }
+  function cyl(rt, rb, h, seg, mat, x, y, z) {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat);
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true;
+    scene.add(m); return m;
+  }
+  function sph(r, mat, x, y, z) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), mat);
+    m.position.set(x, y, z); m.castShadow = true;
+    scene.add(m); return m;
+  }
+
+  /* ══════════════════════════════════════════
+     GROUND PLANE + LANDSCAPE
+  ══════════════════════════════════════════ */
+  // Base ground
+  const gnd = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), mGround);
+  gnd.rotation.x = -Math.PI / 2; gnd.receiveShadow = true; scene.add(gnd);
+
+  // Grass areas (side and back)
+  box(20, 0.05, 80, mGrass, -20, 0.01, 0);
+  box(20, 0.05, 80, mGrass,  22, 0.01, 0);
+  box(40, 0.05, 18, mGrass,   0, 0.01, -19);
+
+  // Driveway / entry path — light concrete strip
+  box(3.5, 0.04, 14, mPatio, -6, 0.02, 9);
+
+  /* ══════════════════════════════════════════
+     MAIN HOUSE STRUCTURE
+  ══════════════════════════════════════════
+    Layout (looking from front / south face):
+    Living wing: x -8..0, z -4..4
+    Bedroom wing: x  1..10, z -4..3.5
+    Connector: x 0..1
+  ══════════════════════════════════════════ */
+
+  // ── LIVING WING ──
+  // Main concrete shell
+  box(8, 3.8, 8, mConcrete, -4, 1.9, 0);
+  // Stone accent panel — left section front
+  box(3, 3.8, 0.12, mStone, -6.5, 1.9, 4.06);
+  // Cladding panel — right section front
+  box(2.5, 3.8, 0.12, mCladding, -2, 1.9, 4.06);
+
+  // Flat roof slab with wide overhang (front & sides)
+  box(9.4, 0.22, 9.2, mRoofMem, -4, 3.91, 0);
+  // Overhang soffit (timber-look underside strip at front)
+  box(9.4, 0.18, 1.0, mTimber, -4, 3.8, 5.0);
+
+  // Overhang support fins (steel columns at front)
+  box(0.12, 3.8, 0.12, mSteel, -6.8, 1.9, 4.0);
+  box(0.12, 3.8, 0.12, mSteel, -1.5, 1.9, 4.0);
+
+  // ── FULL-HEIGHT GLASS WALL — Living / Dining front ──
+  // Large curtain glass panel
+  box(4.5, 3.5, 0.1, mGlass, -3.5, 1.75, 4.06);
+  // Steel mullions
+  for (let i = -5.5; i <= -1.5; i += 1.5) {
+    box(0.06, 3.5, 0.1, mSteel, i, 1.75, 4.07);
+  }
+  // Top transom
+  box(4.5, 0.08, 0.1, mSteel, -3.5, 3.55, 4.07);
+
+  // ── FRONT DOOR VOID — pivot door ──
+  box(1.1, 2.8, 0.1, mCladding, -7.0, 1.4, 4.06); // door panel dark
+  box(0.04, 0.04, 0.18, mGold, -6.55, 1.5, 4.16); // gold handle
+
+  // ── SIDE WINDOWS — east face (living wing) ──
+  box(0.1, 1.6, 2.5, mGlass, 0.06, 2.2, 0.5);
+  box(0.1, 0.06, 2.5, mSteel, 0.07, 3.0, 0.5);
+
+  // ── BEDROOM WING ──
+  // Main body — slightly lower
+  box(9, 3.2, 7.5, mWhite, 5.5, 1.6, -0.25);
+  // Cladding feature strip — vertical dark fins along front
+  for (let xi = 2; xi <= 9.5; xi += 0.9) {
+    box(0.08, 3.2, 0.15, mCladding, xi, 1.6, 3.51);
+  }
+  // Roof slab
+  box(9.6, 0.2, 8.0, mRoofMem, 5.5, 3.3, -0.25);
+  // Roof overhang front
+  box(9.6, 0.16, 0.9, mTimber, 5.5, 3.2, 4.15);
+
+  // ── BEDROOM WINDOWS — horizontal ribbon ──
+  box(6.0, 1.1, 0.1, mGlass, 5.5, 2.2, 3.52);
+  // Steel frames
+  box(6.0, 0.06, 0.1, mSteel, 5.5, 2.76, 3.53);
+  box(6.0, 0.06, 0.1, mSteel, 5.5, 1.64, 3.53);
+  // Verticals
+  for (let xi = 2.4; xi <= 8.5; xi += 1.5) {
+    box(0.06, 1.1, 0.1, mSteel, xi, 2.2, 3.535);
+  }
+
+  // Lower window strip bedroom wing
+  box(3.5, 0.8, 0.1, mGlass, 4.8, 0.7, 3.52);
+
+  // ── CONNECTOR VOLUME ──
+  box(1.2, 3.4, 7.8, mConcrete, 0.6, 1.7, -0.1);
+  // Glazed slot in connector
+  box(0.1, 2.2, 3.0, mGlass, 1.22, 1.6, 0.5);
+
+  /* ══════════════════════════════════════════
+     CANTILEVERED UPPER OVERHANG
+     Visual Architect signature: deep concrete
+     slab projecting over ground floor glazing
+  ══════════════════════════════════════════ */
+  box(8.8, 0.28, 1.8, mConcrete, -4.2, 3.85, 5.2);
+
+  /* ══════════════════════════════════════════
+     POOL + TERRACE
+  ══════════════════════════════════════════ */
+  // Patio slab
+  box(12, 0.18, 5, mPatio, -1, 0.09, 6.5);
+  // Pool surround
+  box(6.5, 0.25, 3.5, mPoolEdge, -3, 0.125, 6.6);
+  // Water surface (slightly below edge)
+  box(6.0, 0.05, 3.1, mPool, -3, 0.22, 6.6);
+  // Pool side walls (submerged)
+  box(6.0, 0.6, 0.1, mPoolEdge, -3, -0.15, 8.18);
+  box(6.0, 0.6, 0.1, mPoolEdge, -3, -0.15, 5.02);
+  box(0.1, 0.6, 3.1, mPoolEdge, 0.05, -0.15, 6.6);
+  box(0.1, 0.6, 3.1, mPoolEdge, -6.05, -0.15, 6.6);
+
+  // Wood deck beside pool
+  box(3.5, 0.16, 5, mDeck, 2.8, 0.08, 6.5);
+  // Deck planks (decorative lines)
+  for (let zi = 4.3; zi <= 9; zi += 0.35) {
+    box(3.5, 0.02, 0.02, mTrunk, 2.8, 0.17, zi);
+  }
+
+  // Outdoor lounger silhouettes
+  box(1.8, 0.2, 0.55, mPatio, 2.5, 0.27, 5.8);
+  box(1.8, 0.2, 0.55, mPatio, 2.5, 0.27, 7.1);
+
+  /* ══════════════════════════════════════════
+     BOUNDARY / GARDEN WALL
+  ══════════════════════════════════════════ */
+  box(0.2, 1.8, 28, mBoundary, -12, 0.9, -2);
+  box(0.2, 1.8, 28, mBoundary,  12, 0.9, -2);
+  box(24, 1.8, 0.2, mBoundary,   0, 0.9, -16);
+
+  /* ══════════════════════════════════════════
+     TREES + LANDSCAPING
+  ══════════════════════════════════════════ */
+  function addPalmTree(x, z, h) {
+    // Trunk — slight lean
+    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.12, h, 7), mTrunk);
+    trunk.position.set(x, h / 2, z);
+    trunk.rotation.z = (Math.random() - 0.5) * 0.08;
+    trunk.castShadow = true; scene.add(trunk);
+    // Frond layers
+    for (let i = 0; i < 3; i++) {
+      const r = 0.9 - i * 0.22, ht = 0.55 - i * 0.12;
+      const frond = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.1, r, ht, 8), i === 0 ? mLeafLight : mLeaf);
+      frond.position.set(x, h + (i * 0.3), z);
+      frond.castShadow = true; scene.add(frond);
+    }
+    // Top ball
+    sph(0.45, mLeaf, x, h + 0.9, z);
+  }
+
+  function addConicalTree(x, z, h) {
+    cyl(0.06, 0.1, h * 0.5, 6, mTrunk, x, h * 0.25, z);
+    cyl(0.01, h * 0.22, h * 0.85, 8, mLeaf, x, h * 0.7, z);
+  }
+
+  function addRoundTree(x, z, r) {
+    cyl(0.1, 0.15, 1.5, 6, mTrunk, x, 0.75, z);
+    sph(r, mLeaf, x, 2.0 + r * 0.5, z);
+    sph(r * 0.75, mLeafLight, x + r * 0.3, 2.2 + r * 0.6, z - r * 0.2);
+  }
+
+  // Front yard accent trees
+  addPalmTree(-9.5, 3.5, 5.5);
+  addPalmTree(-8.8, 0.5, 4.8);
+  addPalmTree(9.8, 2.5, 6.0);
+  addPalmTree(10.5, 5.5, 5.2);
+
+  // Back garden
+  addRoundTree(-9, -8, 2.2);
+  addRoundTree(8.5, -10, 1.8);
+  addRoundTree(-6, -12, 2.5);
+  addConicalTree(10, -5, 6);
+  addConicalTree(-10.5, -5, 5.2);
+
+  // Hedges along boundary
+  for (let zi = -14; zi <= 2; zi += 2.2) {
+    box(0.5, 1.0, 1.8, mLeaf, -11.5, 0.5, zi);
+    box(0.5, 1.0, 1.8, mLeaf, 11.5, 0.5, zi);
+  }
+
+  // Low planter beds near facade
+  box(2.5, 0.35, 0.6, mBoundary, -7.5, 0.175, 5.2);
+  box(2.5, 0.35, 0.6, mBoundary,  2.5, 0.175, 5.2);
+  // Plants in planters
+  for (let i = 0; i < 4; i++) {
+    sph(0.25, mLeaf, -8.5 + i * 0.7, 0.65, 5.2);
+    sph(0.2, mLeafLight, 1.8 + i * 0.6, 0.6, 5.2);
+  }
+
+  /* ══════════════════════════════════════════
+     SUBTLE SKY GRADIENT PLANE (backdrop)
+  ══════════════════════════════════════════ */
+  const skyMat = new THREE.MeshBasicMaterial({ color: 0x0a1525, side: THREE.BackSide });
+  const skyDome = new THREE.Mesh(new THREE.SphereGeometry(120, 16, 8), skyMat);
+  scene.add(skyDome);
+
+  // Horizon glow
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0xff8833, transparent: true, opacity: 0.08 });
+  const glowPlane = new THREE.Mesh(new THREE.PlaneGeometry(120, 20), glowMat);
+  glowPlane.position.set(0, 8, -50);
+  scene.add(glowPlane);
+
+  /* ══════════════════════════════════════════
+     ORBIT CONTROLS
+  ══════════════════════════════════════════ */
+  let isDragging = false, isRight = false;
+  let lastX = 0, lastY = 0;
+  let theta = 0.55, phi = 0.78, radius = 28;
+  let panX = 0, panY = 1.5;
+  let autoRotate = false;
+
+  function updateCamera() {
+    camera.position.x = panX + radius * Math.sin(phi) * Math.sin(theta);
+    camera.position.y = panY + radius * Math.cos(phi);
+    camera.position.z = radius * Math.sin(phi) * Math.cos(theta);
+    camera.lookAt(panX, panY, 0);
+  }
+  updateCamera();
+
+  const el = renderer.domElement;
+  el.addEventListener('mousedown', e => {
+    isDragging = true; isRight = e.button === 2;
+    lastX = e.clientX; lastY = e.clientY;
+    el.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; el.style.cursor = 'grab'; });
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    if (isRight) { panX -= dx * 0.012; panY += dy * 0.012; }
+    else { theta -= dx * 0.007; phi = Math.max(0.1, Math.min(1.45, phi + dy * 0.005)); }
+    updateCamera();
+  });
+  el.addEventListener('wheel', e => {
+    radius = Math.max(6, Math.min(55, radius + e.deltaY * 0.05));
+    updateCamera(); e.preventDefault();
+  }, { passive: false });
+  el.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Touch
+  let lastDist = 0;
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) { lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+    if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      lastDist = Math.sqrt(dx*dx+dy*dy);
+    }
+  }, { passive: true });
+  el.addEventListener('touchmove', e => {
+    if (e.touches.length === 1) {
+      const dx = e.touches[0].clientX - lastX, dy = e.touches[0].clientY - lastY;
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+      theta -= dx * 0.009; phi = Math.max(0.1, Math.min(1.45, phi + dy * 0.007));
+      updateCamera();
+    } else if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      const d = Math.sqrt(dx*dx+dy*dy);
+      radius = Math.max(6, Math.min(55, radius - (d - lastDist) * 0.05));
+      lastDist = d; updateCamera();
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  /* ── View presets ── */
+  const views = {
+    front: { t: Math.PI*0.5, p: 0.95, r: 26, px: 0, py: 1.5 },
+    side:  { t: 0,           p: 0.9,  r: 26, px: 0, py: 1.5 },
+    top:   { t: 0.55,        p: 0.12, r: 32, px: 0, py: 0   },
+    iso:   { t: 0.55,        p: 0.78, r: 28, px: 0, py: 1.5 },
+    pool:  { t: 0.55,        p: 0.65, r: 20, px: -2, py: 0.5 },
+  };
+
+  window.setView = function(name, btn) {
+    const v = views[name]; if (!v) return;
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const s = { t: theta, p: phi, r: radius, px: panX, py: panY };
+    const dur = 900, t0 = performance.now();
+    (function anim(now) {
+      const t = Math.min((now - t0) / dur, 1);
+      const e = t < .5 ? 2*t*t : -1+(4-2*t)*t;
+      theta = s.t + (v.t - s.t) * e;
+      phi   = s.p + (v.p - s.p) * e;
+      radius= s.r + (v.r - s.r) * e;
+      panX  = s.px + (v.px - s.px) * e;
+      panY  = s.py + (v.py - s.py) * e;
+      updateCamera();
+      if (t < 1) requestAnimationFrame(anim);
+    })(t0);
+  };
+
+  window.toggleRotate = function() {
+    autoRotate = !autoRotate;
+    document.getElementById('rotateBtn').classList.toggle('active', autoRotate);
+  };
+
+  /* ── Animate ── */
+  let frame = 0;
+  (function render() {
+    requestAnimationFrame(render);
+    frame++;
+    if (autoRotate) { theta += 0.003; updateCamera(); }
+    // Pool shimmer
+    poolLight.intensity = 5.5 + 1.5 * Math.sin(frame * 0.04);
+    // Interior warmth flicker — very subtle
+    glow1.intensity = 11.5 + 0.8 * Math.sin(frame * 0.02);
+    renderer.render(scene, camera);
+  })();
+
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth;
+    camera.aspect = w / H; camera.updateProjectionMatrix();
+    renderer.setSize(w, H);
+  });
+})();
+</script>
+
+<!-- ══════════ FLOOR PLAN ══════════ -->
+<section class="floorplan-section fade-in">
+  <div class="section-header">
+    <div>
+      <div class="section-label" style="margin-bottom:0.75rem">Ground Floor</div>
+      <h2 class="section-title">Floor Plan</h2>
+    </div>
+    <div class="section-note">
+      Scale: 1:100 (approx.)<br>
+      All dimensions in feet<br>
+      Total: ~2,200 sq ft
+    </div>
+  </div>
+
+  <div class="floorplan-container">
+    <!-- SVG floor plan -->
+    <div class="fp-svg-wrap">
+      <svg width="100%" viewBox="0 0 560 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer wall -->
+        <rect x="20" y="20" width="520" height="460" fill="none" stroke="#1a1612" stroke-width="4"/>
+
+        <!-- Kitchen -->
+        <rect x="20" y="20" width="160" height="130" fill="#faf5e8" stroke="#1a1612" stroke-width="2"/>
+        <text x="100" y="78" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="#6b5a3e" font-weight="400">KITCHEN</text>
+        <text x="100" y="94" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">14 × 12 ft</text>
+        <!-- counter hatch -->
+        <rect x="28" y="28" width="144" height="18" fill="none" stroke="#c8a96e" stroke-width="0.5" opacity="0.5"/>
+        <rect x="28" y="28" width="18" height="18" fill="#e8d9b8" opacity="0.5"/>
+
+        <!-- Dining -->
+        <rect x="180" y="20" width="160" height="130" fill="#f5f8f2" stroke="#1a1612" stroke-width="2"/>
+        <text x="260" y="78" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="#3a5a3a">DINING</text>
+        <text x="260" y="94" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">14 × 12 ft</text>
+        <!-- table symbol -->
+        <ellipse cx="260" cy="82" rx="30" ry="20" fill="none" stroke="#adc8ad" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Living Area -->
+        <rect x="20" y="150" width="160" height="160" fill="#f0f4f8" stroke="#1a1612" stroke-width="2"/>
+        <text x="100" y="225" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="#2a4a6a">LIVING</text>
+        <text x="100" y="240" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">14 × 14 ft</text>
+        <!-- sofa symbol -->
+        <rect x="40" y="250" width="80" height="25" rx="3" fill="none" stroke="#8ab0c8" stroke-width="0.8" opacity="0.5"/>
+
+        <!-- Family Room -->
+        <rect x="180" y="150" width="160" height="160" fill="#f5f2f8" stroke="#1a1612" stroke-width="2"/>
+        <text x="260" y="225" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="#4a2a6a">FAMILY</text>
+        <text x="260" y="240" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">14 × 14 ft</text>
+
+        <!-- Office (spanning full width of living wing) -->
+        <rect x="20" y="310" width="320" height="90" fill="#f8f0f8" stroke="#1a1612" stroke-width="2"/>
+        <text x="180" y="350" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="1" fill="#5a2a5a">HOME OFFICE</text>
+        <text x="180" y="366" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">28 × 8 ft — hinge between wings</text>
+
+        <!-- Central dividing wall (thick) -->
+        <rect x="340" y="20" width="6" height="460" fill="#1a1612"/>
+
+        <!-- Hallway -->
+        <rect x="346" y="20" width="50" height="350" fill="#f0ede8" stroke="#1a1612" stroke-width="1.5"/>
+        <text x="371" y="195" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278"
+          transform="rotate(-90 371 195)">HALLWAY</text>
+
+        <!-- Master Bedroom -->
+        <rect x="396" y="20" width="144" height="150" fill="#fdf0f0" stroke="#1a1612" stroke-width="2"/>
+        <text x="468" y="88" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="0.5" fill="#6a2a2a">MASTER</text>
+        <text x="468" y="103" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="0.5" fill="#6a2a2a">BEDROOM</text>
+        <text x="468" y="118" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">13 × 13 ft</text>
+        <!-- bed symbol -->
+        <rect x="420" y="30" width="48" height="34" rx="2" fill="none" stroke="#d4a8a8" stroke-width="0.8" opacity="0.6"/>
+        <rect x="420" y="30" width="48" height="10" rx="2" fill="#f0d8d8" opacity="0.4"/>
+
+        <!-- En-suite -->
+        <rect x="396" y="170" width="144" height="55" fill="#e8f0f5" stroke="#1a1612" stroke-width="1.5"/>
+        <text x="468" y="200" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" letter-spacing="0.5" fill="#2a4a5a">EN-SUITE</text>
+
+        <!-- Bedroom 2 -->
+        <rect x="396" y="225" width="144" height="100" fill="#fff0f5" stroke="#1a1612" stroke-width="2"/>
+        <text x="468" y="270" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="0.5" fill="#5a2a4a">BEDROOM 2</text>
+        <text x="468" y="285" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">13 × 9 ft</text>
+
+        <!-- Bedroom 3 -->
+        <rect x="396" y="325" width="144" height="100" fill="#fff5f0" stroke="#1a1612" stroke-width="2"/>
+        <text x="468" y="370" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" letter-spacing="0.5" fill="#5a3a2a">BEDROOM 3</text>
+        <text x="468" y="385" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" fill="#8a8278">13 × 9 ft</text>
+
+        <!-- Shared Bath -->
+        <rect x="396" y="425" width="144" height="55" fill="#e8f0f5" stroke="#1a1612" stroke-width="1.5"/>
+        <text x="468" y="455" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" letter-spacing="0.5" fill="#2a4a5a">SHARED BATH</text>
+
+        <!-- Utility strip -->
+        <rect x="20" y="400" width="320" height="80" fill="#f0ede8" stroke="#1a1612" stroke-width="1.5"/>
+        <text x="180" y="443" text-anchor="middle" font-family="DM Mono, monospace" font-size="8" letter-spacing="0.5" fill="#5a5248">UTILITY / LAUNDRY / STORAGE</text>
+
+        <!-- Doors (arcs) -->
+        <!-- Kitchen door -->
+        <path d="M 100 150 A 30 30 0 0 1 130 120" fill="none" stroke="#c8a96e" stroke-width="1"/>
+        <line x1="100" y1="150" x2="100" y2="120" stroke="#c8a96e" stroke-width="0.8"/>
+        <!-- Living door -->
+        <path d="M 100 310 A 30 30 0 0 0 130 280" fill="none" stroke="#c8a96e" stroke-width="1"/>
+        <line x1="100" y1="310" x2="100" y2="280" stroke="#c8a96e" stroke-width="0.8"/>
+        <!-- Master bedroom door -->
+        <path d="M 396 120 A 25 25 0 0 0 421 95" fill="none" stroke="#c8a96e" stroke-width="1"/>
+        <line x1="396" y1="120" x2="396" y2="95" stroke="#c8a96e" stroke-width="0.8"/>
+
+        <!-- Compass -->
+        <g transform="translate(48, 458)">
+          <circle r="15" fill="none" stroke="#1a1612" stroke-width="0.8" opacity="0.4"/>
+          <text x="0" y="-4" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#1a1612" opacity="0.6">N</text>
+          <line x1="0" y1="-2" x2="0" y2="-11" stroke="#1a1612" stroke-width="1.5" opacity="0.6"/>
+          <polygon points="0,-11 -3,-4 3,-4" fill="#1a1612" opacity="0.5"/>
+        </g>
+
+        <!-- Scale bar -->
+        <line x1="380" y1="475" x2="540" y2="475" stroke="#1a1612" stroke-width="1" opacity="0.4"/>
+        <line x1="380" y1="471" x2="380" y2="479" stroke="#1a1612" stroke-width="1" opacity="0.4"/>
+        <line x1="460" y1="471" x2="460" y2="479" stroke="#1a1612" stroke-width="1" opacity="0.4"/>
+        <line x1="540" y1="471" x2="540" y2="479" stroke="#1a1612" stroke-width="1" opacity="0.4"/>
+        <text x="420" y="490" text-anchor="middle" font-family="DM Mono, monospace" font-size="7" fill="#8a8278">0     5m    10m</text>
+      </svg>
+    </div>
+
+    <!-- Legend -->
+    <div class="room-legend">
+      <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);padding-bottom:0.75rem;border-bottom:1px solid var(--line);margin-bottom:0">Room Schedule</div>
+
+      <div class="legend-item"><div class="legend-dot" style="background:#c8a96e"></div><span class="legend-name">Kitchen</span><span class="legend-size">168 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7a9a7a"></div><span class="legend-name">Dining Area</span><span class="legend-size">168 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6a90b0"></div><span class="legend-name">Living Area</span><span class="legend-size">196 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#8a6aaa"></div><span class="legend-name">Family Room</span><span class="legend-size">196 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a06888"></div><span class="legend-name">Home Office</span><span class="legend-size">224 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b06868"></div><span class="legend-name">Master Bedroom</span><span class="legend-size">169 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c08898"></div><span class="legend-name">Bedroom 2</span><span class="legend-size">117 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c89880"></div><span class="legend-name">Bedroom 3</span><span class="legend-size">117 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#88a0aa"></div><span class="legend-name">En-Suite Bath</span><span class="legend-size">55 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#88a0aa"></div><span class="legend-name">Shared Bathroom</span><span class="legend-size">55 sq ft</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a8a090"></div><span class="legend-name">Hallway</span><span class="legend-size">175 sq ft</span></div>
+      <div class="legend-item" style="border-bottom:none"><div class="legend-dot" style="background:#c0b890"></div><span class="legend-name">Utility / Laundry</span><span class="legend-size">160 sq ft</span></div>
+
+      <div style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line)">
+        <div style="font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);margin-bottom:0.75rem">Summary</div>
+        <div style="font-size:0.62rem;line-height:2.2;color:var(--ink)">
+          Living wing: ~1,100 sq ft<br>
+          Sleeping wing: ~900 sq ft<br>
+          Service zone: ~200 sq ft<br>
+          <strong style="font-weight:400;color:var(--warm-muted)">Total gross: ~2,200 sq ft</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROOM CARDS ══════════ -->
+<section class="rooms-section fade-in">
+  <div class="section-label" style="color:var(--warm)">Space by space</div>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--paper)">Room Descriptions</h2>
+
+  <div class="rooms-grid">
+    <div class="room-card">
+      <div class="room-card-num">01 / Living Wing</div>
+      <div class="room-card-name">Kitchen</div>
+      <div class="room-card-size">14 × 12 ft — 168 sq ft</div>
+      <div class="room-card-desc">Open to the dining area, the kitchen features an island counter and north-facing clerestory windows for task lighting. Oriented to benefit from morning sun. Direct access to utility room behind.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">02 / Living Wing</div>
+      <div class="room-card-name">Dining Area</div>
+      <div class="room-card-size">14 × 12 ft — 168 sq ft</div>
+      <div class="room-card-desc">Adjacent to the kitchen and opening toward the family room. Generous dimensions accommodate a 10-seater table. Corner glazing brings in eastern light at mealtimes.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">03 / Living Wing</div>
+      <div class="room-card-name">Living Area</div>
+      <div class="room-card-size">14 × 14 ft — 196 sq ft</div>
+      <div class="room-card-desc">The formal reception space at the front of the house. Floor-to-ceiling glazed doors connect to the front terrace, blurring the boundary between inside and outside.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">04 / Living Wing</div>
+      <div class="room-card-name">Family Room</div>
+      <div class="room-card-size">14 × 14 ft — 196 sq ft</div>
+      <div class="room-card-desc">The informal heart of the home. Opens to a rear garden through a wide sliding door. A media wall on the east side anchors the space. Adjacent to the kitchen for casual supervision.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">05 / Hinge</div>
+      <div class="room-card-name">Home Office</div>
+      <div class="room-card-size">28 × 8 ft — 224 sq ft</div>
+      <div class="room-card-desc">Deliberately placed at the junction between wings. Accessible from both but isolated from both — a physical threshold that creates a mental shift between work and domestic life.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">06 / Sleeping Wing</div>
+      <div class="room-card-name">Master Bedroom</div>
+      <div class="room-card-size">13 × 13 ft + en-suite</div>
+      <div class="room-card-desc">Positioned at the far north end of the bedroom wing for maximum privacy. Full en-suite bathroom. A private courtyard-facing window provides ventilation without noise from the street.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">07 / Sleeping Wing</div>
+      <div class="room-card-name">Bedroom 2</div>
+      <div class="room-card-size">13 × 9 ft — 117 sq ft</div>
+      <div class="room-card-desc">Well-proportioned secondary bedroom suitable for a double bed and built-in wardrobes. Natural ventilation from south-facing window. Shared bathroom immediately adjacent via hallway.</div>
+    </div>
+    <div class="room-card">
+      <div class="room-card-num">08 / Sleeping Wing</div>
+      <div class="room-card-name">Bedroom 3</div>
+      <div class="room-card-size">13 × 9 ft — 117 sq ft</div>
+      <div class="room-card-desc">Equivalent in scale to Bedroom 2. Positioned at the south end of the wing, it benefits from afternoon cross-ventilation. Can double as a guest room or study with flexible furniture arrangement.</div>
+    </div>
+    <div class="room-card" style="border-right:none">
+      <div class="room-card-num">09 / Service</div>
+      <div class="room-card-name">Utility Zone</div>
+      <div class="room-card-size">~28 × 7 ft — 200 sq ft</div>
+      <div class="room-card-desc">Runs the full width of the living wing rear. Laundry, storage, and potential garage entry. Discreetly positioned behind the office — invisible from main living areas but accessible from kitchen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DESIGN RATIONALE ══════════ -->
+<section class="rationale-section fade-in">
+  <div>
+    <div class="section-label">Design intent</div>
+    <h2 class="rationale-title">Why This<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--warm-muted)">Works</em></h2>
+    <div class="rationale-body">
+      <p>The Pavilion is organized around a single spatial idea: the hard separation of social life from private life, joined at a hinge. This is not a stylistic choice — it is a structural one, and everything else follows from it.</p>
+      <p>In Kampala's climate, cross-ventilation and thermal zoning matter enormously. The bedroom wing faces north, reducing direct sun gain during the day. The living wing faces south and east, capturing morning light and evening breezes. The two-wing structure creates a courtyard effect between them, accelerating air movement through the building naturally.</p>
+      <p>The open-plan living zone is a deliberate choice for a culture of hospitality — one where guests move between kitchen, dining, and sitting without ceremony, and where a household of many can occupy the same space without crowding any part of it.</p>
+    </div>
+  </div>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-num">01</div>
+      <div class="principle-text">
+        <div class="principle-title">Separation of zones</div>
+        <div class="principle-desc">Social and sleeping activities are separated by a structural wall and a transitional hallway. Once in the bedroom wing, the house is quiet regardless of activity in the living zone.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">02</div>
+      <div class="principle-text">
+        <div class="principle-title">The office as threshold</div>
+        <div class="principle-desc">Positioning the home office at the hinge means that "going to work" involves a physical transition — not just sitting at a different screen — while still keeping it within the house.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">03</div>
+      <div class="principle-text">
+        <div class="principle-title">Passive climate strategy</div>
+        <div class="principle-desc">The north-facing bedroom wing and south-east-facing living wing work with the equatorial sun rather than against it. No bedroom faces west — avoiding afternoon heat gain in sleeping spaces.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">04</div>
+      <div class="principle-text">
+        <div class="principle-title">Room for growth</div>
+        <div class="principle-desc">The utility strip and office are both over-sized relative to their immediate function. Both can evolve: the office becomes a fourth bedroom, the utility becomes a self-contained studio unit.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <span>The Pavilion House — Design Proposal 2026</span>
+  <span>Architectural Design Studio · Kampala</span>
+  <span>ADS-2026-047 · Residential</span>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
