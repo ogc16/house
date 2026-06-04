@@ -1,1 +1,1 @@
-# house
+Welcoming proposals.
