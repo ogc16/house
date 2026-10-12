@@ -1,0 +1,567 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1612;
+  --paper: #f5f0e8;
+  --warm: #c8a96e;
+  --warm-light: #e8d9b8;
+  --warm-muted: #9e7e4a;
+  --stone: #8a8278;
+  --line: rgba(26,22,18,0.15);
+  --red-accent: #8b3a2a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, var(--line) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, var(--line) 60px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2.5rem 3rem;
+  position: relative;
+  z-index: 2;
+  border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.hero-meta {
+  text-align: right;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--stone);
+  line-height: 1.8;
+}
+
+.hero-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.project-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--warm-muted);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.project-label::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--warm-muted);
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--warm-muted);
+}
+
+.hero-desc {
+  max-width: 520px;
+  font-size: 0.72rem;
+  line-height: 2;
+  color: var(--stone);
+  letter-spacing: 0.05em;
+  margin-bottom: 3rem;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.hero-footer {
+  padding: 1.5rem 3rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-hint {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 2rem;
+  background: var(--stone);
+  animation: pulse-down 2s ease-in-out infinite;
+}
+@keyframes pulse-down {
+  0%,100% { opacity: 0.3; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ── 3D HOUSE ILLUSTRATION ── */
+.illustration-section {
+  background: var(--ink);
+  padding: 5rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.illustration-section::before {
+  content: 'PERSPECTIVE VIEW';
+  position: absolute;
+  top: 2.5rem; right: 3rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.2);
+}
+
+.section-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--warm);
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--warm);
+}
+.section-label.tight { margin-bottom: 0; }
+
+.illustration-section.compact { padding-bottom: 3rem; }
+
+.hero-year {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--stone);
+}
+
+.house-3d-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.fp-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.model-hint {
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: rgba(200,169,110,0.5);
+  text-align: right;
+  line-height: 2;
+}
+
+.canvas-3d {
+  width: 100%;
+  height: 560px;
+  position: relative;
+  border: 1px solid rgba(200,169,110,0.15);
+  cursor: grab;
+}
+
+.view-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.loading-3d {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1612;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+.loading-3d span {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: rgba(200,169,110,0.6);
+}
+
+/* ── FLOOR PLAN ── */
+.floorplan-section {
+  padding: 5rem 3rem;
+  position: relative;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.section-note {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--stone);
+  text-align: right;
+  line-height: 1.8;
+}
+
+.floorplan-container {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  align-items: start;
+}
+
+.fp-svg-wrap {
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 2rem;
+}
+
+/* Room legend sidebar */
+.room-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.legend-heading,
+.summary-heading {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+
+.legend-heading {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+}
+
+.legend-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.legend-item:hover { background: rgba(200,169,110,0.05); padding-left: 0.5rem; }
+.legend-item:last-child { border-bottom: none; }
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+.legend-name {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.legend-size {
+  font-size: 0.6rem;
+  color: var(--stone);
+  letter-spacing: 0.05em;
+}
+
+.legend-summary {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.legend-summary .summary-heading { margin-bottom: 0.75rem; }
+
+.summary-body {
+  font-size: 0.62rem;
+  line-height: 2.2;
+  color: var(--ink);
+}
+.summary-body strong {
+  font-weight: 400;
+  color: var(--warm-muted);
+}
+
+/* ── ROOM DETAILS ── */
+.rooms-section {
+  background: var(--ink);
+  padding: 5rem 3rem;
+  color: var(--paper);
+}
+
+.rooms-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--paper);
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 3rem;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.room-card {
+  padding: 2rem;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s;
+  cursor: default;
+}
+.room-card:hover { background: rgba(200,169,110,0.08); }
+.room-card:nth-child(3n) { border-right: none; }
+
+.room-card-num {
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--warm-muted);
+  margin-bottom: 1rem;
+}
+
+.room-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  margin-bottom: 0.75rem;
+  line-height: 1.1;
+}
+
+.room-card-size {
+  font-size: 0.62rem;
+  color: var(--warm);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.room-card-desc {
+  font-size: 0.62rem;
+  line-height: 1.9;
+  color: rgba(245,240,232,0.5);
+  letter-spacing: 0.04em;
+}
+
+/* ── DESIGN RATIONALE ── */
+.rationale-section {
+  padding: 5rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.rationale-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 2.5rem;
+}
+
+.rationale-title em {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--warm-muted);
+}
+
+.rationale-body {
+  font-size: 0.68rem;
+  line-height: 2.2;
+  color: var(--stone);
+  letter-spacing: 0.04em;
+}
+
+.rationale-body p { margin-bottom: 1.5rem; }
+
+.principles {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.principle {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+
+.principle-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--warm-light);
+  line-height: 1;
+}
+
+.principle-text { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.principle-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+}
+
+.principle-desc {
+  font-size: 0.62rem;
+  line-height: 1.9;
+  color: var(--stone);
+  letter-spacing: 0.03em;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  color: rgba(245,240,232,0.4);
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+}
+
+/* ── 3D VIEW BUTTONS ── */
+.view-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(200,169,110,0.7);
+  border: 1px solid rgba(200,169,110,0.3);
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.view-btn:hover { background: rgba(200,169,110,0.1); color: #c8a96e; border-color: rgba(200,169,110,0.6); }
+.view-btn.active { background: rgba(200,169,110,0.15); color: #c8a96e; border-color: #c8a96e; }
+
+/* ── ANIMATIONS ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .floorplan-container { grid-template-columns: 1fr; }
+  .rooms-grid { grid-template-columns: 1fr 1fr; }
+  .rooms-grid .room-card:nth-child(2n) { border-right: none; }
+  .rooms-grid .room-card:nth-child(3n) { border-right: 1px solid rgba(255,255,255,0.1); }
+  .rationale-section { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-title { font-size: clamp(3rem,8vw,5rem); }
+}

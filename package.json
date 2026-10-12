@@ -1,0 +1,15 @@
+{
+  "name": "pavilion-house",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive architectural design proposal for The Pavilion House",
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.11",
+    "vitest": "^4.1.11"
+  }
+}

@@ -17,7 +17,8 @@ proposals as discussion starters rather than final answers.
 
 ## Getting started
 
-There is no build step. Clone the repo and open `index.html` in a browser:
+There is no build step for the site. Clone the repo and open `index.html` in a
+browser:
 
 ```bash
 git clone https://github.com/ogc16/house.git
@@ -31,10 +32,21 @@ python -m http.server 8000
 # then open http://localhost:8000
 ```
 
+To run the unit tests or make changes to the JavaScript:
+
+```bash
+npm install
+npm test
+npm run test:coverage
+```
+
 ## Development guidelines
 
-- Everything lives in a single `index.html`. Keep it self-contained; avoid
-  introducing a build step or external tooling unless discussed first.
+- Markup lives in `index.html`, styling in `styles.css`, and browser behaviour
+  in `app.js`. Keep the runtime dependency-free — no build step and no bundler.
+- Pure logic (geometry, easing, camera math) belongs in `lib/scene-math.js` so
+  it stays unit-testable. Keep it free of DOM and WebGL references, and add a
+  test in `test/` for any new helper.
 - Match the existing visual language — the type scale, spacing, and the warm
   paper/ink palette defined in the `:root` CSS variables.
 - Keep JavaScript dependency-light. Three.js is loaded from a CDN; prefer

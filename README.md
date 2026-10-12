@@ -15,7 +15,7 @@ This repository holds the responsive HTML/CSS/JS proposal site. It is open to su
 - **Dimensioned floor plan** — an annotated SVG ground-floor plan with a full room schedule and area summary.
 - **Room descriptions** — a space-by-space breakdown of the nine principal rooms.
 - **Design rationale** — the four organizing principles behind the layout, including the passive climate strategy for an equatorial site.
-- **Zero build step** — a single self-contained `index.html`.
+- **Zero build step** — plain HTML/CSS/JS served straight from disk.
 - **Responsive layout** — adapts to desktop and mobile.
 
 ## Getting started
@@ -39,7 +39,17 @@ python -m http.server 8000
 
 ```
 house/
-├── index.html   # The entire proposal: markup, styles, and 3D/scroll scripts
+├── index.html              # Markup only — links the styles and scripts
+├── styles.css              # All styling for the proposal
+├── app.js                  # Interactive 3D viewer + scroll animations
+├── lib/
+│   └── scene-math.js       # Pure, unit-tested camera/easing helpers
+├── test/
+│   └── scene-math.test.js  # Vitest unit tests
+├── .github/workflows/
+│   └── sonarcloud.yml      # CI: tests + SonarCloud analysis
+├── vitest.config.mjs       # Test + coverage configuration
+├── sonar-project.properties
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
@@ -50,7 +60,30 @@ house/
 
 - Plain HTML5, CSS3, and vanilla JavaScript — no framework or build step.
 - [Three.js](https://threejs.org/) (r128, via CDN) for the interactive 3D model.
+- [Vitest](https://vitest.dev/) for unit tests and coverage.
 - Google Fonts: *Cormorant Garamond* and *DM Mono*.
+
+## Development
+
+The runtime site has no dependencies beyond a browser. To work on the code or run the tests:
+
+```bash
+npm install
+npm test              # run the unit tests
+npm run test:coverage # run tests and write coverage/lcov.info
+```
+
+Pure geometry helpers live in `lib/scene-math.js` and are kept free of DOM/WebGL
+dependencies so they can be unit tested in Node. `app.js` wires those helpers to
+Three.js and the page, and is excluded from coverage as browser-only glue.
+
+### Continuous integration
+
+`.github/workflows/sonarcloud.yml` runs the tests with coverage and submits the
+results to SonarCloud on every push and pull request. To enable it, add a
+`SONAR_TOKEN` repository secret and set `sonar.organization` /
+`sonar.projectKey` in `sonar-project.properties` to match your SonarCloud
+project.
 
 ## Proposals welcome
 
