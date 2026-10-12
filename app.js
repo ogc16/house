@@ -11,6 +11,7 @@
   var container = document.getElementById('canvas3d');
 
   var VIEW_HEIGHT = 580;
+  var ACTIVE_CLASS = 'active';
   var frame = 0;
 
   /* ── Scene state (module scope, shared by the build helpers) ── */
@@ -368,8 +369,8 @@
     window.setView = function (name, btn) {
       var v = SM.VIEWS[name];
       if (!v) return;
-      document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('active'); });
-      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove(ACTIVE_CLASS); });
+      if (btn) btn.classList.add(ACTIVE_CLASS);
       var start = { t: theta, p: phi, r: radius, px: panX, py: panY };
       var dur = 900;
       var t0 = performance.now();
@@ -388,7 +389,7 @@
 
     window.toggleRotate = function () {
       autoRotate = !autoRotate;
-      document.getElementById('rotateBtn').classList.toggle('active', autoRotate);
+      document.getElementById('rotateBtn').classList.toggle(ACTIVE_CLASS, autoRotate);
     };
 
     return {

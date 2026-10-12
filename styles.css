@@ -8,7 +8,6 @@
   --warm-muted: #9e7e4a;
   --stone: #8a8278;
   --line: rgba(26,22,18,0.15);
-  --red-accent: #8b3a2a;
 }
 
 html { scroll-behavior: smooth; }
@@ -216,11 +215,8 @@ body {
   color: var(--stone);
 }
 
-.house-3d-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem 0;
+.fp-svg-wrap svg text {
+  font-family: 'DM Mono', monospace;
 }
 
 .fp-toolbar {
