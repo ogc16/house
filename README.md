@@ -47,9 +47,8 @@ house/
 ├── test/
 │   └── scene-math.test.js  # Vitest unit tests
 ├── .github/workflows/
-│   └── sonarcloud.yml      # CI: tests + SonarCloud analysis
+│   └── ci.yml              # CI: tests + coverage on push and PR
 ├── vitest.config.mjs       # Test + coverage configuration
-├── sonar-project.properties
 ├── README.md
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
@@ -79,11 +78,9 @@ Three.js and the page, and is excluded from coverage as browser-only glue.
 
 ### Continuous integration
 
-`.github/workflows/sonarcloud.yml` runs the tests with coverage and submits the
-results to SonarCloud on every push and pull request. To enable it, add a
-`SONAR_TOKEN` repository secret and set `sonar.organization` /
-`sonar.projectKey` in `sonar-project.properties` to match your SonarCloud
-project.
+`.github/workflows/ci.yml` installs dependencies, runs the unit tests with
+coverage, and uploads the coverage report as a build artifact on every push to
+`main` and on pull requests.
 
 ## Proposals welcome
 
